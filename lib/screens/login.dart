@@ -1,3 +1,4 @@
+import 'package:firebase_auth_login/helper/login_background.dart';
 import 'package:flutter/material.dart';
 
 class AuthPage extends StatelessWidget {
@@ -12,33 +13,19 @@ class AuthPage extends StatelessWidget {
         body: Stack(
       alignment: Alignment.center,
       children: <Widget>[
-        Container(
-          color: Colors.white,
+        CustomPaint(
+          size: size,
+          painter: LoginBackground(),
         ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
-            Container(
-              width: 200,
-              height: 200,
-              color: Colors.blue,
-            ),
+            _logoImage,
             Stack(
               children: <Widget>[
                 _inputFrom(size),
-                Positioned(
-                  left: size.width * 0.15,
-                  right: size.width * 0.15,
-                  bottom: 0,
-                  child: RaisedButton(
-                    child: Text('Login'),
-                    color: Colors.blue,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15)),
-                    onPressed: null,
-                  ),
-                ),
+                _authButton(size),
               ],
             ),
             Container(
@@ -53,6 +40,38 @@ class AuthPage extends StatelessWidget {
       ],
     ));
   }
+
+  Widget get _logoImage => Expanded(
+        child: Padding(
+          padding: const EdgeInsets.only(top: 100, left: 35, right: 35),
+          child: FittedBox(
+            fit: BoxFit.contain,
+            child: CircleAvatar(
+              backgroundImage: NetworkImage("https://loremflickr.com/500/500"),
+            ),
+          ),
+        ),
+      );
+
+  Widget _authButton(Size size) => Positioned(
+        left: size.width * 0.15,
+        right: size.width * 0.15,
+        bottom: 0,
+        child: SizedBox(
+          height: 50,
+          child: RaisedButton(
+              child: Text(
+                'Login',
+                style: TextStyle(fontSize: 20, color: Colors.white),
+              ),
+              color: Colors.blue,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(25)),
+              onPressed: () {
+                if (_formKey.currentState.validate()) {}
+              }),
+        ),
+      );
 
   Widget _inputFrom(Size size) {
     return Padding(
@@ -77,6 +96,7 @@ class AuthPage extends StatelessWidget {
                   },
                 ),
                 TextFormField(
+                  obscureText: true,
                   controller: _passwordController,
                   decoration: InputDecoration(
                       icon: Icon(Icons.vpn_key), labelText: 'Password'),
